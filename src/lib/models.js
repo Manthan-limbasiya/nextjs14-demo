@@ -55,5 +55,27 @@ const postSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const contactSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
+    phoneNumber: {
+      type: Number,
+    },
+    desc: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
+
 export const User = mongoose.models?.User || mongoose.model("User", userSchema);
 export const Post = mongoose.models?.Post || mongoose.model("Post", postSchema);
+export const Contact =
+  mongoose.models?.Contact || mongoose.model("Contact", contactSchema);
