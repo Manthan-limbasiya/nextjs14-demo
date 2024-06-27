@@ -6,7 +6,7 @@ import { getPost } from "@/lib/data";
 
 // FETCH DATA WITH AN API
 const getData = async (slug) => {
-  const res = await fetch(`/api/blog/${slug}`);
+  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blog/${slug}`);
 
   if (!res.ok) {
     throw new Error("Something went wrong");
