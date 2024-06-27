@@ -4,7 +4,7 @@ import styles from "./blog.module.css";
 
 // FETCH DATA WITH AN API
 const getData = async () => {
-  const res = await fetch("https://nextjs14-demo-mauve.vercel.app/api/blog", {
+  const res = await fetch("/api/blog", {
     cache: "no-store",
   });
 
