@@ -2,6 +2,7 @@ import PostCard from "@/components/postCard/postCard";
 import styles from "./blog.module.css";
 // import { getPosts } from "@/lib/data";
 
+export const revalidate = 10; // Revalidate every 10 seconds
 // FETCH DATA WITH AN API
 const getData = async () => {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blog`, {
