@@ -7,7 +7,13 @@ export const GET = async (request) => {
     connectToDb();
 
     const posts = await Post.find();
-    return NextResponse.json(posts);
+    const response = NextResponse.json(posts);
+    response.headers.set(
+      "Cache-Control",
+      "s-maxage=10, stale-while-revalidate=59"
+    );
+
+    return response;
   } catch (err) {
     console.log(err);
     throw new Error("Failed to fetch posts!");
