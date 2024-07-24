@@ -6,6 +6,7 @@ import styles from "./blog.module.css";
 const getData = async () => {
   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blog`, {
     cache: "no-store",
+    next: { revalidate: 10 },
   });
 
   if (!res.ok) {

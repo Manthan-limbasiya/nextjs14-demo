@@ -7,17 +7,24 @@ import { signIn, signOut } from "./auth";
 import bcrypt from "bcryptjs";
 
 export const addPost = async (prevState, formData) => {
-  // const title = formData.get("title");
-  // const desc = formData.get("desc");
-  // const slug = formData.get("slug");
-
   const { title, desc, slug, userId, img } = Object.fromEntries(formData);
+
+  if (img) {
+    const isValidUrl = (url) => {
+      return url.startsWith("https://images.pexels.com");
+    };
+    if (!isValidUrl(img)) {
+      return {
+        error: "Image url must be from pexels.com",
+      };
+    }
+  }
 
   try {
     connectToDb();
     const newPost = new Post({
-      title,
-      desc,
+      title: title.trim(),
+      desc: desc.trim(),
       slug,
       userId,
       img,
@@ -27,8 +34,12 @@ export const addPost = async (prevState, formData) => {
     console.log("saved to db");
     revalidatePath("/blog");
     revalidatePath("/admin");
+    return { success: "Post added successfully" };
   } catch (err) {
     console.log(err);
+    if (err.errorResponse.code === 11000) {
+      return { error: "slug already exists" };
+    }
     return { error: "Something went wrong!" };
   }
 };
@@ -43,6 +54,7 @@ export const deletePost = async (formData) => {
     console.log("deleted from db");
     revalidatePath("/blog");
     revalidatePath("/admin");
+    return { success: "Post deleted successfully" };
   } catch (err) {
     console.log(err);
     return { error: "Something went wrong!" };
@@ -50,8 +62,7 @@ export const deletePost = async (formData) => {
 };
 
 export const addUser = async (prevState, formData) => {
-  const { username, email, password, img, isAdmin } =
-    Object.fromEntries(formData);
+  const { username, email, password, isAdmin } = Object.fromEntries(formData);
 
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(password, salt);
@@ -62,15 +73,18 @@ export const addUser = async (prevState, formData) => {
       username,
       email,
       password: hashedPassword,
-      img,
       isAdmin,
     });
 
     await newUser.save();
     console.log("saved to db");
     revalidatePath("/admin");
+    return { success: "User added successfully" };
   } catch (err) {
-    console.log(err);
+    console.log(err.errorResponse.code);
+    if (err.errorResponse.code === 11000) {
+      return { error: "User already exists" };
+    }
     return { error: "Something went wrong!" };
   }
 };
@@ -85,6 +99,7 @@ export const deleteUser = async (formData) => {
     await User.findByIdAndDelete(id);
     console.log("deleted from db");
     revalidatePath("/admin");
+    return { success: "User deleted successfully" };
   } catch (err) {
     console.log(err);
     return { error: "Something went wrong!" };

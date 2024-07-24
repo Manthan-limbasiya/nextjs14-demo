@@ -37,13 +37,20 @@ const SinglePostPage = async ({ params }) => {
   // FETCH DATA WITHOUT AN API
   //   const post = await getPost(slug);
 
+  const isValidUrl = (url) => {
+    return url.startsWith("http://") || url.startsWith("https://");
+  };
+
   return (
     <div className={styles.container}>
-      {post.img && (
-        <div className={styles.imgContainer}>
-          <Image src={post.img} alt="" fill className={styles.img} />
-        </div>
-      )}
+      <div className={styles.imgContainer}>
+        {isValidUrl(post.img) ? (
+          <Image src={post.img} alt="Image" fill className={styles.img} />
+        ) : (
+          <p>No image available</p>
+        )}
+      </div>
+
       <div className={styles.textContainer}>
         <h1 className={styles.title}>{post.title}</h1>
         <div className={styles.detail}>

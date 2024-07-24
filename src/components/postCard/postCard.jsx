@@ -3,14 +3,20 @@ import styles from "./postCard.module.css";
 import Link from "next/link";
 
 const PostCard = ({ post }) => {
+  const isValidUrl = (url) => {
+    return url.startsWith("http://") || url.startsWith("https://");
+  };
   return (
     <div className={styles.container}>
       <div className={styles.top}>
-        {post.img && (
-          <div className={styles.imgContainer}>
-            <Image src={post.img} alt="" fill className={styles.img} />
-          </div>
-        )}
+        <div className={styles.imgContainer}>
+          {isValidUrl(post.img) ? (
+            <Image src={post.img} alt="Image" fill className={styles.img} />
+          ) : (
+            <p>No image available</p>
+          )}
+        </div>
+
         <span className={styles.date}>
           {post.createdAt?.toString().slice(0, 10)}
         </span>

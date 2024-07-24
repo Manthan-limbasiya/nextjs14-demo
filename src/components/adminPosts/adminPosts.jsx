@@ -5,6 +5,9 @@ import { deletePost } from "@/lib/action";
 
 const AdminPosts = async () => {
   const posts = await getPosts();
+  const isValidUrl = (url) => {
+    return url.startsWith("http://") || url.startsWith("https://");
+  };
 
   return (
     <div className={styles.container}>
@@ -12,12 +15,17 @@ const AdminPosts = async () => {
       {posts.map((post) => (
         <div className={styles.post} key={post.id}>
           <div className={styles.detail}>
-            <Image
-              src={post.img || "/noAvatar.png"}
-              alt=""
-              width={50}
-              height={50}
-            />
+            {isValidUrl(post.img) ? (
+              <Image
+                src={post.img || "/noavatar.png"}
+                alt=""
+                width={50}
+                height={50}
+              />
+            ) : (
+              <Image src="/noavatar.png" alt="" width={50} height={50} />
+            )}
+
             <span className={styles.postTitle}>{post.title}</span>
           </div>
           <form action={deletePost}>

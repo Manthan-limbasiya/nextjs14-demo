@@ -4,9 +4,20 @@ import Image from "next/image";
 import styles from "./contact.module.css";
 import { useFormState } from "react-dom";
 import { addContact } from "@/lib/action";
+import { useEffect } from "react";
+import { messageNotification } from "@/lib/notification";
 
 const ContactPage = () => {
   const [state, formAction] = useFormState(addContact, undefined);
+
+  useEffect(() => {
+    if (state?.error) {
+      messageNotification("error", state?.error);
+    } else if (state?.success) {
+      messageNotification("success", state?.success);
+    }
+  }, [state]);
+
   return (
     <div className={styles.container}>
       <div className={styles.imgContainer}>
@@ -21,7 +32,7 @@ const ContactPage = () => {
             placeholder="Name and Surname"
           />
           <input
-            type="text"
+            type="email"
             required
             name="email"
             placeholder="Email Address"
@@ -39,8 +50,6 @@ const ContactPage = () => {
             placeholder="Message"
           ></textarea>
           <button>Send</button>
-          {state?.error}
-          {state?.success}
         </form>
       </div>
     </div>
