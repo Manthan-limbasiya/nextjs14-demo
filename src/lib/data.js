@@ -37,6 +37,7 @@ export const getUser = async (id) => {
 };
 
 export const getUsers = async () => {
+  noStore();
   try {
     connectToDb();
     const users = await User.find();
