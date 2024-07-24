@@ -1,28 +1,28 @@
 import PostCard from "@/components/postCard/postCard";
 import styles from "./blog.module.css";
-// import { getPosts } from "@/lib/data";
+import { getPosts } from "@/lib/data";
 
-export const revalidate = 10; // Revalidate every 10 seconds
-// FETCH DATA WITH AN API
-const getData = async () => {
-  const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blog`, {
-    cache: "no-store",
-    next: { revalidate: 10 },
-  });
+// export const revalidate = 10; // Revalidate every 10 seconds
+// // FETCH DATA WITH AN API
+// const getData = async () => {
+//   const res = await fetch(`${process.env.NEXTAUTH_URL}/api/blog`, {
+//     cache: "no-store",
+//     next: { revalidate: 10 },
+//   });
 
-  if (!res.ok) {
-    throw new Error("Something went wrong");
-  }
+//   if (!res.ok) {
+//     throw new Error("Something went wrong");
+//   }
 
-  return res.json();
-};
+//   return res.json();
+// };
 
 const BlogPage = async () => {
   // FETCH DATA WITH AN API
-  const posts = await getData();
+  // const posts = await getData();
 
   // FETCH DATA WITHOUT AN API
-  //   const posts = await getPosts();
+  const posts = await getPosts();
 
   return (
     <div className={styles.container}>
